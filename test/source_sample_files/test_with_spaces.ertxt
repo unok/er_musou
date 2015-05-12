@@ -1,0 +1,31 @@
+# Title: ERサンプル
+
+users/会員
+    +id/会員ID [bigserial][NN][U]
+    nick_name/ニックネーム [varchar(128)][NN]
+    password/パスワード [varchar(128)][='********']
+      # sha1 でハッシュ化して登録
+    profile/プロフィール [text]
+    updated/更新日時 [timestamp with timezone][NN][=now()]
+    created/作成日時 [timestamp with timezone][NN][=now()]
+    
+articles/記事 
+    +id/記事ID [bigserial][NN][U]
+    title/タイトル [varchar(256)][NN]
+    contents/内容 [text][NN]
+    owner_user_id/投稿者 [bigint][NN] 0..*--1 users
+    updated/更新日時 [timestamp with timezone][NN][=now()]
+    created/作成日時 [timestamp with timezone][NN][=now()]
+    
+tags/タグ 
+    +id/タグID [bigserial][NN][U]
+    name/タグ [varchar(256)][NN][U]
+        # 空白、タブは 1 つにまとめて登録
+    updated/更新日時 [timestamp with timezone][NN][=now()]
+    created/作成日時 [timestamp with timezone][NN][=now()]
+    
+article_tags/記事タグ管理
+    +article_id/記事ID [bigint][NN] 0..*--1 users
+    +tag_id/タグID [bigint][NN] 0..*--1 tags
+    updated/更新日時 [timestamp with timezone][NN][=now()]
+    created/作成日時 [timestamp with timezone][NN][=now()]

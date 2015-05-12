@@ -1,0 +1,35 @@
+@(ertxt: jp.ne.suehiro.ErMusou.Ertxt)
+
+digraph g {
+    node [shape=box,style=rounded,height=0.08,fontname="Ricty-Regular"];
+@for(t <- ertxt.tables) {
+    @t.name.table_name [label = <<table border="0" cellborder="0" cellpadding="0">
+      <tr><td colspan="2"><font face="Ricty-Bold">@t.logical_name.get.table_logical_name/@t.name.table_name</font></td></tr>@for(c <- t.col_list) {
+      <tr><td align="left">@c.logical_name.logical_name/@c.name.name @c.col_type.col_type @(
+                if (c.not_null.is_not_null && c.unique.is_unique) {
+                    "(UNN)"
+                } else if (c.not_null.is_not_null) {
+                    "(NN)"
+                } else if (c.unique.is_unique) {
+                    "(U)"
+                }
+            )</td><td>@(
+              if (c.pkey.is_primary && c.relation.nonEmpty) {
+                  "PF"
+              } else if (c.pkey.is_primary) {
+                  "P"
+              } else if (c.relation.nonEmpty) {
+                  "F"
+              }
+              )</td></tr>}
+    </table>>];
+}
+@for(t <- ertxt.tables) { @for(r <- t.relations) {
+    edge [
+        arrowhead = "empty"
+        headlabel = "@r.line_from"
+        taillabel = "@r.line_to"
+    ]
+    @t.name.table_name -> @r.to.table_name
+}}
+}

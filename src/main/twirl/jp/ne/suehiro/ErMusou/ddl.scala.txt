@@ -1,0 +1,9 @@
+@(ertxt: jp.ne.suehiro.ErMusou.Ertxt)
+@for(t <- ertxt.tables) {
+DROP TABLE @t.name.table_name CASCADE;}
+@for(t <- ertxt.tables) {
+CREATE TABLE @t.name.table_name (@t.col_list.map {c =>
+    @c.name.name @c.col_type.col_type@if(c.unique.is_unique) { UNIQUE}@if(c.not_null.is_not_null) { NOT NULL}@if(c.default.isDefined){ DEFAULT @c.default.get.default}}.mkString(",")@if(t.primary_keys.size > 0) {,
+    PRIMARY KEY(@t.primary_keys.map{p =>@p.name.name}.mkString(", "))}
+);
+}
